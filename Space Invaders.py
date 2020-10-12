@@ -37,6 +37,22 @@ for side in range(4): #side could be any word, it is just a placeholder variable
     
 border_pen.hideturtle()
 
+#Set the score to 0
+score = 0
+
+#create the scoreboard
+score_pen = turtle.Turtle()
+score_pen.speed("fastest")
+score_pen.color("white")
+score_pen.penup()
+score_pen.hideturtle()
+score_pen.setposition(-290, 280)
+
+scorestring = "Score: %s" %score #this is so the text we want to write can change
+score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
+#the write command takes what will be written, if it moves, the alignment on the screen and the specifics of the font
+
+
 
 #Create Player Turtle
 player = turtle.Turtle()
@@ -149,18 +165,24 @@ while True:
         enemy.setx(x)
         
         #Move the enemy back and down
-        if enemy.xcor() > 280:      
-            y = enemy.ycor()
-            y -= 20
+        if enemy.xcor() > 280:
+            #moves all of the enemies down
+            for e in enemies:
+                y = e.ycor()
+                y -= 20
+                e.sety(y)
+            #changes the enemy's direction
             enemyspeed*= -1
-            enemy.sety(y)
+            
     
             
         if enemy.xcor() < -280:
-            y = enemy.ycor()
-            y -= 20
+            for e in enemies:
+                y = e.ycor()
+                y -= 20
+                e.sety(y)
             enemyspeed *= -1
-            enemy.sety(y)
+            
             
         #check if bullet hits enemy
         if isCollision(bullet, enemy):
@@ -172,6 +194,12 @@ while True:
             x = random.randint(-200, 200)
             y = random.randint(100, 250)
             enemy.setposition(x, y)
+            
+            #update the score
+            score += 10
+            scorestring = "Score: %s" %score 
+            score_pen.clear()
+            score_pen.write(scorestring, False, align="left", font=("Arial", 14, "normal"))
 
     
         if isCollision(player, enemy):
